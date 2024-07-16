@@ -68,6 +68,7 @@ public class MainMenu implements Menu {
                         } else {
                             menuToNavigate = new SignOutMenu();
                         }
+                        break mainLoop;
 
                         case 3:
                         menuToNavigate = new ProductCatalogMenu();

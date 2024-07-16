@@ -10,4 +10,15 @@ public class SignOutMenu implements Menu{
 	{
 		context = ApplicationContext.getInstance();
 	}
+
+    public void start(){
+        printMenuHeader();
+        context.setLoggedInUser(null);
+    }
+
+    public void printMenuHeader(){
+
+        System.out.println("--- SIGN OUT ---");
+		System.out.println("Have a nice day! Look forward to welcoming back!");		
+    }
 }

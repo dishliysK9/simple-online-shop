@@ -6,8 +6,6 @@ import onlineshop.entities.User;
 import onlineshop.services.UserManagementService;
 
 public class DefaultUserManagementService implements UserManagementService{
-    
-    private static DefaultUserManagementService instance;
 
     private static final String NOT_UNIQUE_EMAIL_ERROR_MESSAGE = "This email is already used by another user. Please, use another email";
 	private static final String EMPTY_EMAIL_ERROR_MESSAGE = "You have to input email to register. Please, try one more time";
@@ -15,10 +13,19 @@ public class DefaultUserManagementService implements UserManagementService{
 	
 	private static final int DEFAULT_USERS_CAPACITY = 10;
 
+    private static DefaultUserManagementService instance;
+
     private User[] users;
 	private int lastUserIndex;
 
-    public static DefaultUserManagementService getInstance(){
+    {
+		users = new User[DEFAULT_USERS_CAPACITY];
+	}
+
+    private DefaultUserManagementService() {
+	}
+
+    public static UserManagementService getInstance(){
         if (instance == null){
             instance = new DefaultUserManagementService();
         }
@@ -42,7 +49,7 @@ public class DefaultUserManagementService implements UserManagementService{
         if (user == null) {
 			return NO_ERROR_MESSAGE;
 		}
-
+        
         String errorMessage = checkUniqueEmail(user.getEmail());
         if (errorMessage != null && !errorMessage.isEmpty()) {
 			return errorMessage;

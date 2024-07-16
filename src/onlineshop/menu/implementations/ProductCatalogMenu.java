@@ -3,6 +3,7 @@ package onlineshop.menu.implementations;
 import java.util.Scanner;
 
 import onlineshop.configs.ApplicationContext;
+import onlineshop.entities.Cart;
 import onlineshop.entities.Product;
 import onlineshop.menu.Menu;
 import onlineshop.services.ProductManagementService;
@@ -46,9 +47,32 @@ public class ProductCatalogMenu implements Menu{
             }
 
             if(userInput.equalsIgnoreCase(CHECKOUT_COMMAND)){
-                
+
+                Cart sessionCart = context.getSessionCart();
+                if (sessionCart == null || sessionCart.isEmpty()){
+                    System.out.println("Your cart is empty. Please, add product to cart first and then proceed with checkout");
+                } else {
+                    menuToNavigate = new CheckoutMenu();
+                    break;
+                }
+            } else {
+
+                Product productToAddToCart = fetchProduct(userInput);
+
+                if (productToAddToCart ==  null){
+
+                    System.out.println("Please, enter product ID if you want to add product to cart. Or enter 'checkout' if you want to proceed with checkout. Or enter 'menu' if you want to navigate back to the main menu.");
+				    continue;
+
+                }
+
+                processAddToCart(productToAddToCart);
+
             }
         }
+
+        menuToNavigate.start();
+
     }
 
     @Override
@@ -57,7 +81,7 @@ public class ProductCatalogMenu implements Menu{
 		System.out.println("Enter product id to add it to the cart or 'menu' if you want to navigate back to the main menu");
     }
 
-    private Product printProductsToConsole(){
+    private void printProductsToConsole(){
         Product[] products = productManagementService.getProducts();
         for (Product product : products){
             System.out.println(product);
@@ -72,6 +96,24 @@ public class ProductCatalogMenu implements Menu{
 		String userInput = sc.next();
 
 		return userInput;
+    }
+
+    private Product fetchProduct(String userInput){
+
+        int productIdToAddToCart = Integer.parseInt(userInput);
+        Product productToAddToCart = productManagementService.getProductById(productIdToAddToCart);
+        return productToAddToCart;
+
+    }
+
+    private void processAddToCart(Product productToAddToCart){
+
+        context.getSessionCart().addProduct(productToAddToCart);
+        System.out.printf("Product %s has been added to your cart. "
+				+ "If you want to add a new product - enter the product id. "
+				+ "If you want to proceed with checkout - enter word "
+				+ "'checkout' to console %n", productToAddToCart.getProductName());
+
     }
     
 }
