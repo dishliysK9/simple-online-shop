@@ -1,8 +1,5 @@
-# Name: Alexandar Dichliyski
-# Faculty: FDIBA
-# Faculty number: 201221013
 
-Online shop using Java (no framework).
+# Online shop using Java (no framework).
 
 Functionalities:
 * Sign up with name, family, password and email.
